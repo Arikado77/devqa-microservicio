@@ -1,0 +1,9 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+devqa-microservicio,com.practicacarlos.devqa_microservicio.service,ProductoService,0,116,0,6,0,29,0,10,0,7
+devqa-microservicio,com.practicacarlos.devqa_microservicio,DevqaMicroservicioApplication,5,3,0,0,2,1,1,1,1,1
+devqa-microservicio,com.practicacarlos.devqa_microservicio.exception,ApiError,0,21,0,0,0,1,0,1,0,1
+devqa-microservicio,com.practicacarlos.devqa_microservicio.exception,GlobalExceptionHandler,25,76,0,2,4,15,2,8,2,7
+devqa-microservicio,com.practicacarlos.devqa_microservicio.exception,DatoDuplicadoException,0,4,0,0,0,2,0,1,0,1
+devqa-microservicio,com.practicacarlos.devqa_microservicio.exception,RecursoNoEncontradoException,0,4,0,0,0,2,0,1,0,1
+devqa-microservicio,com.practicacarlos.devqa_microservicio.model,Producto,0,53,0,0,0,23,0,12,0,12
+devqa-microservicio,com.practicacarlos.devqa_microservicio.controller,ProductoController,0,51,0,0,0,12,0,6,0,6

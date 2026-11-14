@@ -1,0 +1,8 @@
+Análisis local: NO EJECUTADO.
+Intento de consulta: GET http://localhost:9000/api/system/status
+Resultado: conexión no disponible (curl error 28; sin respuesta HTTP).
+Autenticación: no se encontró SONAR_TOKEN en el entorno.
+Quality Gate: SIN RESULTADO; no debe interpretarse como PASSED.
+Proyecto y ruta JaCoCo XML quedan configurados en pom.xml.
+Comando (PowerShell, con servidor y token autorizados):
+.\mvnw.cmd clean verify sonar:sonar "-Dsonar.host.url=http://localhost:9000"

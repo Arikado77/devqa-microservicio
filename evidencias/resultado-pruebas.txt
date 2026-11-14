@@ -1,0 +1,15 @@
+Comando: .\mvnw.cmd -B -ntp verify
+Resultado Maven: BUILD SUCCESS
+El intento .\mvnw.cmd clean verify no pudo completar la fase clean: Windows reportó un bloqueo al eliminar target\classes. El verify posterior sí pasó.
+
+Pruebas de controlador (MockMvc): 11 ejecutadas, 0 fallidas, 0 errores, 0 omitidas.
+Pruebas unitarias de ProductoService (Mockito): 12 ejecutadas, 0 fallidas, 0 errores, 0 omitidas.
+Integración HTTP + MongoDB Testcontainers: 1 omitida; no hay Docker disponible.
+Total: 24 pruebas contabilizadas; 23 aprobadas y 1 omitida.
+
+JaCoCo bundle (8 clases de producción):
+Líneas: 87 cubiertas / 94 totales = 92.55%.
+Ramas: 8 cubiertas / 8 totales = 100%.
+Quality check mínimo configurado: 80% de líneas y 80% de ramas. Aprobado.
+
+La suite MockMvc prueba el contrato MVC sin MongoDB. La integración con persistencia real no se ejecutó.

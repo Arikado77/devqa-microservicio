@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Práctica 2 Dev-QA | Microservicio de productos</title>
+<style>
+@page { size: A4; margin: 18mm 17mm; }
+body { font: 10.5pt/1.48 "Segoe UI", Arial, sans-serif; color: #172033; }
+h1,h2,h3 { color: #12355b; }
+h1 { font-size: 25pt; line-height: 1.15; }
+h2 { font-size: 16pt; border-bottom: 2px solid #168aad; padding-bottom: 5px; margin-top: 20px; }
+h3 { font-size: 12pt; }
+.cover { height: 245mm; display: flex; flex-direction: column; justify-content: center; text-align: center; page-break-after: always; }
+.cover .institution { font-size: 16pt; text-transform: uppercase; letter-spacing: 1px; color: #12355b; }
+.cover .practice { margin-top: 42mm; color: #168aad; font-size: 13pt; font-weight: bold; }
+.cover .name { margin-top: 26mm; font-size: 13pt; }
+.cover .date { margin-top: 8mm; color: #526179; }
+.page { page-break-after: always; }
+.last { page-break-after: auto; }
+table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 9.5pt; }
+th { background: #12355b; color: white; text-align: left; }
+th,td { border: 1px solid #ccd5e0; padding: 6px 8px; }
+tr:nth-child(even) td { background: #f3f7fa; }
+code { font: 9pt Consolas, monospace; background: #eff3f7; padding: 2px 4px; }
+pre { white-space: pre-wrap; border-left: 3px solid #168aad; background: #f3f7fa; padding: 10px; }
+.callout { border-left: 4px solid #dc8a00; background: #fff7e6; padding: 9px 12px; }
+.ok { color: #087443; font-weight: bold; }
+.pending { color: #9c5700; font-weight: bold; }
+footer { color: #68778c; font-size: 8pt; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div class="institution">Universidad Tecnológica de Chihuahua</div>
+  <div class="practice">PRÁCTICA 2 · DEV-QA</div>
+  <h1>Microservicio REST<br>de productos</h1>
+  <p>Spring Boot · MongoDB · Pruebas automatizadas · JaCoCo</p>
+  <div class="name"><strong>Alumno</strong><br>Carlos Arikado Márquez Carlos Eduardo</div>
+  <div class="date">13 de noviembre de 2026</div>
+</section>
+
+<section class="page">
+<h2>1. Resumen y arquitectura</h2>
+<p>Se implementó una API REST de productos con Java 17 y Spring Boot 3.5.7. Incluye validación Jakarta, acceso MongoDB mediante Spring Data, control de duplicados, formato JSON uniforme para errores, pruebas unitarias y pruebas MVC.</p>
+<p><strong>Componentes:</strong> <code>ProductoController</code> recibe HTTP y valida; <code>ProductoService</code> aplica reglas de negocio y traduce conflictos concurrentes; <code>ProductoRepository</code> accede a MongoDB; <code>Producto</code> se almacena en la colección <code>productos</code>; <code>GlobalExceptionHandler</code> normaliza errores.</p>
+<p><strong>Stack:</strong> Java 17.0.11, Maven Wrapper 3.10.0, Spring Boot 3.5.7, Spring MVC, Spring Data MongoDB, Jakarta Validation, JUnit 5, Mockito, AssertJ, MockMvc, Testcontainers y JaCoCo 0.8.13.</p>
+<h2>2. API REST</h2>
+<table><thead><tr><th>Método y ruta</th><th>Resultado</th></tr></thead><tbody>
+<tr><td>GET /api/productos</td><td>200 · colección</td></tr>
+<tr><td>GET /api/productos/{id}</td><td>200 o 404</td></tr>
+<tr><td>POST /api/productos</td><td>201 + Location; 400 o 409</td></tr>
+<tr><td>PUT /api/productos/{id}</td><td>200; 400, 404 o 409</td></tr>
+<tr><td>DELETE /api/productos/{id}</td><td>204 o 404</td></tr>
+</tbody></table>
+<p>El cuerpo requiere nombre/código no vacíos, precio positivo y stock no negativo. El código tiene índice único. Los errores exponen timestamp, status, error, message, path y detalles de validación; nunca trazas ni información interna de MongoDB.</p>
+<pre>{"nombre":"Teclado","codigo":"TEC-001","precio":899.0,"stock":5}</pre>
+</section>
+
+<section class="page">
+<h2>3. Pruebas y cobertura</h2>
+<p>Comando verificado: <code>.\mvnw.cmd -B -ntp verify</code> — <span class="ok">BUILD SUCCESS</span>.</p>
+<p><code>.\mvnw.cmd clean verify</code> se intentó, pero Windows reportó un bloqueo al eliminar <code>target\classes</code> en la fase <code>clean</code>. El <code>verify</code> posterior completó correctamente; el log del bloqueo se incluye en <code>evidencias/clean-verify.log</code>.</p>
+<table><thead><tr><th>Suite</th><th>Ejecutadas</th><th>Aprobadas</th><th>Omitidas</th></tr></thead><tbody>
+<tr><td>Controlador MockMvc</td><td>11</td><td>11</td><td>0</td></tr>
+<tr><td>Servicio Mockito</td><td>12</td><td>12</td><td>0</td></tr>
+<tr><td>Integración MongoDB Testcontainers</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>24</strong></td><td><strong>23</strong></td><td><strong>1</strong></td></tr>
+</tbody></table>
+<p>JaCoCo contabilizó ocho clases de producción: <strong>87/94 líneas cubiertas (92.55%)</strong> y <strong>8/8 ramas (100%)</strong>. El umbral de 80% para líneas y ramas pasó. Reportes: <code>target/site/jacoco/index.html</code> y <code>target/site/jacoco/jacoco.xml</code>.</p>
+<div class="callout">MockMvc verifica solicitudes y estados HTTP usando el servicio simulado. No equivale a persistencia. Testcontainers está implementado para MongoDB real, pero se omitió por falta de Docker.</div>
+<h2>4. Persistencia y ambiente</h2>
+<p>La URI se configura mediante <code>MONGODB_URI</code>. Docker Compose define MongoDB 7.0.14 con volumen persistente y credenciales por archivo local excluido de Git.</p>
+<p>La prueba real con mongosh contra <code>localhost:27017</code> devolvió <code>ECONNREFUSED</code>. Docker no está instalado y no se encontró servidor/servicio local. No se afirma una operación real de lectura/escritura.</p>
+</section>
+
+<section class="page last">
+<h2>5. Calidad, evidencias y bloqueos</h2>
+<p>La verificación JaCoCo aprobó los umbrales configurados. SonarQube no pudo analizarse: <code>localhost:9000</code> no respondió y no había <code>SONAR_TOKEN</code>.</p>
+<p class="pending">Quality Gate: SIN RESULTADO. No se declara PASSED ni FAILED.</p>
+<p>El scanner Maven y la ruta del XML JaCoCo están configurados. Para completar el análisis, iniciar SonarQube autorizado, establecer el token como variable de entorno y ejecutar:</p>
+<pre>.\mvnw.cmd clean verify sonar:sonar "-Dsonar.host.url=http://localhost:9000"</pre>
+<p>La carpeta <code>evidencias/</code> contiene el log Maven, el CSV JaCoCo y los resultados de tests. No se fabricaron capturas HTTP: las capturas Postman/cURL contra MongoDB real requieren iniciar el servicio. Los casos 400/404/409 sí tienen pruebas MockMvc.</p>
+<h2>6. Conclusión</h2>
+<p>El CRUD, sus validaciones y contrato JSON de errores quedaron implementados. Las suites unitarias y MVC aprobaron, con 92.55% de líneas y 100% de ramas. La integración real MongoDB, las capturas HTTP de extremo a extremo y el Quality Gate quedan pendientes de infraestructura disponible; las limitaciones se reportan explícitamente.</p>
+<h2>Referencias</h2>
+<ul>
+<li>Spring Boot 3.5: https://docs.spring.io/spring-boot/3.5/reference/</li>
+<li>Spring Data MongoDB: https://docs.spring.io/spring-data/mongodb/reference/</li>
+<li>Testcontainers MongoDB: https://java.testcontainers.org/modules/databases/mongodb/</li>
+<li>JaCoCo Maven: https://www.jacoco.org/jacoco/trunk/doc/maven.html</li>
+<li>SonarScanner Maven: https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/scanners/sonarscanner-for-maven/</li>
+</ul>
+<footer>Práctica 2 Dev-QA · Universidad Tecnológica de Chihuahua · 13 de noviembre de 2026</footer>
+</section>
+</body>
+</html>
